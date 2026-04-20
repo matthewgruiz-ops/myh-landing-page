@@ -1,52 +1,625 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>MY YACHT HUB</title>
-    <meta name="description" content="MyYachtHub is a white-labelled digital manual platform that brings all of a yacht's information into one place. Built for builders, owners and crew." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.myyachthub.co.uk/" />
-    <meta property="og:title" content="MY YACHT HUB" />
-    <meta property="og:description" content="The digital manual platform for yacht builders, owners and crew." />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MY YACHT HUB" />
-    <meta name="twitter:description" content="The digital manual platform for yacht builders, owners and crew." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" crossorigin href="/assets/index-CRwR8oJN.css" />
-    <style>
-      /* Log In button injected into the nav */
-      #myh-login-btn {
-        position: fixed;
-        top: 14px;
-        right: 20px;
-        z-index: 9999;
-        background: transparent;
-        border: 1px solid rgba(255,255,255,0.35);
-        color: #fff;
-        font-family: 'Lato', sans-serif;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        padding: 8px 18px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: background 0.2s, border-color 0.2s;
-        display: inline-block;
-      }
-      #myh-login-btn:hover {
-        background: rgba(255,255,255,0.1);
-        border-color: rgba(255,255,255,0.6);
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Log In button — links to the MYH platform -->
-    <a id="myh-login-btn" href="https://app.myyachthub.co.uk/login">LOG IN</a>
-    <div id="root"></div>
-    <script type="module" crossorigin src="/assets/index-BKZEq360.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY YACHT HUB — Lifecycle Knowledge Platform</title>
+  <meta name="description" content="A lifecycle knowledge platform that connects every system, component, and procedure into one structured hub — built for builders to deliver, and owners and crew to rely on." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.myyachthub.co.uk/" />
+  <meta property="og:title" content="MY YACHT HUB — Lifecycle Knowledge Platform" />
+  <meta property="og:description" content="A lifecycle knowledge platform for yachts. Built for builders, owners, and crew." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #080e14;
+      --navy-mid: #0d1720;
+      --gold: #c9a96e;
+      --gold-light: #d4b97e;
+      --cream: #f0ead6;
+      --text-muted: rgba(255,255,255,0.5);
+      --text-dim: rgba(255,255,255,0.3);
+      --border: rgba(255,255,255,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: #fff;
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; line-height: 1.15; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4rem; height: 64px;
+      background: rgba(8,14,20,0.88); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo svg { width: 28px; height: 32px; }
+    .nav-logo-text { display: flex; flex-direction: column; gap: 2px; }
+    .nav-logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 600; color: var(--cream); letter-spacing: 0.06em; line-height: 1; }
+    .nav-logo-sub { font-size: 0.42rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); line-height: 1; }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta { color: var(--navy) !important; background: var(--gold); padding: 0.5rem 1.2rem; border-radius: 2px; font-weight: 700 !important; transition: background 0.2s !important; }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: flex-end; padding: 0 5vw 9vh;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://d2xsxph8kpxj0f.cloudfront.net/310519663544723831/7NQfELuxwy5fSmFwMPnP8u/myh-hero-dLfEAWeGh9DbivhnYjpxN9.webp');
+      background-size: cover; background-position: center 40%;
+      filter: brightness(0.5);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(8,14,20,0.8) 35%, transparent 100%),
+                  linear-gradient(to top, rgba(8,14,20,0.65) 0%, transparent 55%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 680px; }
+    .eyebrow {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .eyebrow::before { content: ''; display: block; width: 36px; height: 1px; background: var(--gold); }
+    .eyebrow span { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+    .hero h1 { font-size: clamp(3rem, 5.5vw, 5.2rem); font-weight: 400; color: #fff; }
+    .hero h1 em { display: block; font-style: italic; color: var(--gold); }
+    .hero-body { font-size: 1rem; color: rgba(255,255,255,0.65); max-width: 480px; margin: 1.5rem 0 1rem; line-height: 1.85; }
+    .hero-bullets { list-style: none; margin-bottom: 2.5rem; }
+    .hero-bullets li { font-size: 0.78rem; color: rgba(255,255,255,0.5); padding: 0.2rem 0; }
+    .hero-bullets li::before { content: '—'; color: var(--gold); margin-right: 0.6rem; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ── Buttons ── */
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; background: transparent;
+      border: 1px solid var(--gold); color: var(--gold);
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none; font-family: 'Lato', sans-serif; font-weight: 700;
+      cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .btn-gold:hover { background: var(--gold); color: var(--navy); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.65);
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none; font-family: 'Lato', sans-serif; font-weight: 700;
+      cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* ── Sections ── */
+    section { padding: 8rem 5vw; }
+    .section-eyebrow {
+      display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2.5rem;
+    }
+    .section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .sec-num { font-size: 0.6rem; letter-spacing: 0.1em; color: var(--text-dim); }
+    .sec-label { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+    .sec-heading { font-size: clamp(2.8rem, 4.5vw, 4.2rem); font-weight: 400; color: #fff; max-width: 700px; }
+    .sec-heading em { display: block; font-style: italic; color: var(--gold); }
+    .sec-body { font-size: 1rem; color: rgba(255,255,255,0.6); max-width: 600px; margin-top: 1.5rem; line-height: 1.9; }
+
+    /* ── Problem ── */
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; margin-top: 4rem; }
+    .problem-body { font-size: 1rem; color: rgba(255,255,255,0.62); line-height: 1.9; }
+    .problem-body p + p { margin-top: 1.2rem; }
+    .problem-body .em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.15rem; color: rgba(255,255,255,0.82); }
+    .problem-cards { display: flex; flex-direction: column; gap: 1rem; }
+    .pcard { display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 3px; }
+    .pcard svg { width: 28px; height: 28px; flex-shrink: 0; color: var(--gold); opacity: 0.7; }
+    .pcard p { font-size: 0.83rem; color: rgba(255,255,255,0.58); line-height: 1.6; }
+
+    /* ── Solution ── */
+    .solution-section { background: var(--navy-mid); }
+    .sol-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 4rem; }
+    .sol-card { padding: 2.5rem 2rem; border: 1px solid var(--border); border-top: 2px solid var(--gold); background: rgba(255,255,255,0.02); }
+    .sol-card h3 { font-size: 1.6rem; font-weight: 500; color: #fff; margin-bottom: 1rem; }
+    .sol-card p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.8; }
+
+    /* ── Platform ── */
+    .platform-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: center; margin-top: 4rem; }
+    .platform-features { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; }
+    .pfeat { display: flex; align-items: center; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); }
+    .pfeat::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .pfeat span { font-size: 0.73rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .mockup { position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+    .mockup img { width: 100%; display: block; }
+    .mockup-label { position: absolute; bottom: 0.8rem; left: 1rem; font-size: 0.58rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.35); }
+
+    /* ── How ── */
+    .how-section { background: var(--navy-mid); }
+    .steps { display: grid; grid-template-columns: repeat(2,1fr); gap: 3rem; margin-top: 4rem; }
+    .step { display: flex; gap: 2rem; align-items: flex-start; }
+    .step-num { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; color: rgba(201,169,110,0.18); line-height: 1; flex-shrink: 0; width: 56px; }
+    .step-content h3 { font-size: 1.3rem; font-weight: 500; color: #fff; margin-bottom: 0.75rem; }
+    .step-content p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.8; }
+
+    /* ── Owners ── */
+    .owners-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+    .ocard { position: relative; overflow: hidden; border-radius: 4px; min-height: 400px; display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem; }
+    .ocard-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: brightness(0.42); transition: filter 0.4s; }
+    .ocard:hover .ocard-bg { filter: brightness(0.55); }
+    .ocard-ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,14,20,0.92) 0%, transparent 60%); }
+    .ocard-cnt { position: relative; z-index: 2; }
+    .ocard-lbl { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .ocard h3 { font-size: 1.9rem; font-weight: 400; color: #fff; margin-bottom: 0.9rem; }
+    .ocard h3 em { font-style: italic; color: var(--gold); }
+    .ocard p { font-size: 0.83rem; color: rgba(255,255,255,0.58); line-height: 1.7; }
+
+    /* ── Builders ── */
+    .builders-section { background: var(--navy-mid); }
+    .builder-cards { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-top: 4rem; }
+    .bcard { padding: 2rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 3px; }
+    .bcard-title { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .bcard p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.8; }
+    .bquote { margin-top: 4rem; padding: 2rem 2.5rem; border-left: 2px solid var(--gold); background: rgba(201,169,110,0.04); }
+    .bquote p { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-style: italic; color: rgba(255,255,255,0.72); }
+
+    /* ── Vision ── */
+    .vision-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 4rem; }
+    .vcard { padding: 2rem; border: 1px solid var(--border); border-radius: 3px; background: rgba(255,255,255,0.02); }
+    .vcard p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.8; }
+    .vcard p::before { content: '—'; color: var(--gold); margin-right: 0.5rem; }
+    .vision-quote { margin: 5rem auto 0; text-align: center; max-width: 700px; }
+    .vision-quote blockquote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem,2.2vw,1.9rem); font-style: italic; color: rgba(255,255,255,0.68); line-height: 1.55; margin-bottom: 2rem; }
+    .vision-tagline { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+
+    /* ── Contact ── */
+    .contact-section { background: var(--navy-mid); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 6rem; margin-top: 4rem; }
+    .contact-info h3 { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 0.4rem; margin-top: 1.8rem; font-family: 'Lato', sans-serif; font-weight: 400; }
+    .contact-info h3:first-child { margin-top: 0; }
+    .contact-info p { font-size: 0.92rem; color: #fff; }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-field label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .form-field input, .form-field select, .form-field textarea {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      color: #fff; padding: 0.85rem 1rem; font-family: 'Lato', sans-serif;
+      font-size: 0.88rem; font-weight: 300; outline: none;
+      transition: border-color 0.2s; border-radius: 2px;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: rgba(201,169,110,0.5); }
+    .form-field select option { background: var(--navy-mid); }
+    .form-field textarea { resize: vertical; min-height: 120px; }
+
+    /* ── Footer ── */
+    footer { background: var(--navy); border-top: 1px solid var(--border); padding: 4rem 5vw; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+    .footer-logo svg { width: 26px; height: 30px; }
+    .footer-logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--cream); letter-spacing: 0.06em; }
+    .footer-tagline { font-size: 0.8rem; color: var(--text-muted); line-height: 1.8; max-width: 280px; }
+    .footer-col h4 { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 1.2rem; font-family: 'Lato', sans-serif; font-weight: 400; }
+    .footer-nav { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-nav a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-nav a:hover { color: #fff; }
+    .footer-promise { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; color: rgba(255,255,255,0.38); line-height: 1.6; }
+    .footer-bottom { padding-top: 2rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .footer-bottom p, .footer-bottom a { font-size: 0.7rem; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+    .footer-bottom a:hover { color: var(--text-muted); }
+
+    /* ── Fade-in ── */
+    .fi { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fi.vis { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .hero { padding: 0 1.5rem 7vh; }
+      .problem-grid, .platform-grid, .owners-grid, .contact-grid, .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .sol-cards, .steps, .builder-cards, .vision-cards { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 80 90" fill="none" stroke="#c9a96e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="40" cy="12" r="8"/>
+      <line x1="40" y1="20" x2="40" y2="78"/>
+      <line x1="18" y1="32" x2="62" y2="32"/>
+      <path d="M40 78 C20 78 12 62 12 62"/>
+      <path d="M40 78 C60 78 68 62 68 62"/>
+      <path d="M12 62 C8 56 16 50 20 56"/>
+      <path d="M68 62 C72 56 64 50 60 56"/>
+      <circle cx="18" cy="32" r="2.5" fill="#c9a96e" stroke="none"/>
+      <circle cx="62" cy="32" r="2.5" fill="#c9a96e" stroke="none"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">MyYachtHub</span>
+      <span class="nav-logo-sub">Vessel Knowledge Platform</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#platform">The Platform</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#builders">For Builders</a></li>
+    <li><a href="#owners">For Owners</a></li>
+    <li><a href="#vision">The Vision</a></li>
+    <li><a href="#contact" class="nav-cta">Get In Touch</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content fi">
+    <div class="eyebrow"><span>Lifecycle Knowledge Platform</span></div>
+    <h1>Every yacht has a manual.<em>Now it has a hub.</em></h1>
+    <p class="hero-body">A lifecycle knowledge platform that connects every system, component, and procedure into one structured hub — built for builders to deliver, and owners and crew to rely on.</p>
+    <ul class="hero-bullets">
+      <li>Built into the yacht from day one</li>
+      <li>Visual, structured, and easy to navigate</li>
+      <li>Designed for the full lifecycle</li>
+    </ul>
+    <div class="hero-ctas">
+      <a href="https://app.myyachthub.co.uk" class="btn-gold">Explore the Platform &rarr;</a>
+      <a href="#contact" class="btn-ghost">Request a Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 01 Problem ── -->
+<section id="problem">
+  <div class="section-eyebrow">
+    <span class="sec-num">01</span>
+    <span class="sec-label">The Problem</span>
+  </div>
+  <h2 class="sec-heading fi">Complex yachts<em>don't have to be complicated.</em></h2>
+  <div class="problem-grid">
+    <div class="problem-body fi">
+      <p>Modern yachts are extraordinary machines — combining advanced engineering, technical systems, and specialist equipment. But when something goes wrong, tracing the problem is hard. Information is scattered across PDFs, manuals, emails, and crew memory — with no clear path from fault to fix.</p>
+      <p>When crew change or ownership transitions, that knowledge disappears entirely. There is no structured way to manage what a vessel knows about itself.</p>
+      <p class="em">For one of the most complex private assets in the world, this is a major gap.</p>
+    </div>
+    <div class="problem-cards fi">
+      <div class="pcard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <p>Information is scattered across PDFs, manuals, and crew experience</p>
+      </div>
+      <div class="pcard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <p>Knowledge is lost between crew changes and ownership transitions</p>
+      </div>
+      <div class="pcard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <p>Fault tracing is slow — no clear path from symptom to system to fix</p>
+      </div>
+      <div class="pcard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        <p>There is no structured way to manage what a vessel knows about itself</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 02 Solution ── -->
+<section id="solution" class="solution-section">
+  <div class="section-eyebrow">
+    <span class="sec-num">02</span>
+    <span class="sec-label">The Solution</span>
+  </div>
+  <h2 class="sec-heading fi">A structured knowledge platform<em>for modern yachts.</em></h2>
+  <p class="sec-body fi">MyYachtHub is not a document system. It is not a folder structure. It is a lifecycle knowledge platform that organises every system, component, and procedure into one connected hub. <strong style="color:#fff;font-weight:400;">Not documents. Structured, connected knowledge.</strong></p>
+  <div class="sol-cards">
+    <div class="sol-card fi">
+      <h3>Structured</h3>
+      <p>Organises vessels into systems, sub-systems, equipment, and components — mirroring the way the yacht is actually built.</p>
+    </div>
+    <div class="sol-card fi">
+      <h3>Connected</h3>
+      <p>Connects information directly to real equipment and locations. Click a system, find everything about it.</p>
+    </div>
+    <div class="sol-card fi">
+      <h3>Persistent</h3>
+      <p>Creates a knowledge layer that follows the yacht across the full lifecycle — from build through ownership, refit, and resale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── 03 Platform ── -->
+<section id="platform">
+  <div class="section-eyebrow">
+    <span class="sec-num">03</span>
+    <span class="sec-label">The Platform</span>
+  </div>
+  <h2 class="sec-heading fi">Navigate the yacht,<em>not the documents.</em></h2>
+  <div class="platform-grid">
+    <div class="fi">
+      <p style="font-size:1rem;color:rgba(255,255,255,0.6);line-height:1.9;margin-bottom:2.5rem;">Every yacht has a natural structure — systems, sub-systems, equipment, components. MyYachtHub organises knowledge the same way. Users navigate the vessel itself to find exactly what they need.</p>
+      <div class="platform-features">
+        <div class="pfeat"><span>Interactive vessel layout — navigate by system or component</span></div>
+        <div class="pfeat"><span>Full system knowledge at every level</span></div>
+        <div class="pfeat"><span>Maintenance tracking and service history</span></div>
+        <div class="pfeat"><span>Crew notes, fault logs, and procedures</span></div>
+      </div>
+      <div style="margin-top:2.5rem;">
+        <a href="https://app.myyachthub.co.uk" class="btn-gold">Open the Platform &rarr;</a>
+      </div>
+    </div>
+    <div class="mockup fi">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663544723831/7NQfELuxwy5fSmFwMPnP8u/myh-ui-mockup-v2-7JPuNemgNR7fuARC5HUEpz.webp" alt="MyYachtHub platform interface" loading="lazy" />
+      <span class="mockup-label">app.myyachthub.co.uk</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── 04 How It Works ── -->
+<section id="how" class="how-section">
+  <div class="section-eyebrow">
+    <span class="sec-num">04</span>
+    <span class="sec-label">How It Works</span>
+  </div>
+  <h2 class="sec-heading fi">From build to resale.<em>One continuous record.</em></h2>
+  <div class="steps">
+    <div class="step fi">
+      <span class="step-num">01</span>
+      <div class="step-content">
+        <h3>Builder structures the vessel digitally</h3>
+        <p>The builder creates a vessel model — structuring it by systems, sub-systems, and equipment. Existing manuals are uploaded and all systems information is stored so every piece can be amended depending on what is installed on each vessel.</p>
+      </div>
+    </div>
+    <div class="step fi">
+      <span class="step-num">02</span>
+      <div class="step-content">
+        <h3>Systems and layouts are mapped visually</h3>
+        <p>The platform creates an interactive, navigable layout of the vessel. Every system, component, and procedure is connected to the visual structure — making knowledge easy to find and understand.</p>
+      </div>
+    </div>
+    <div class="step fi">
+      <span class="step-num">03</span>
+      <div class="step-content">
+        <h3>Knowledge is stored in structured formats</h3>
+        <p>Each component carries its full information stack: overview, how-to guides, maintenance schedules, troubleshooting, parts references, service history, and crew notes — all in one place.</p>
+      </div>
+    </div>
+    <div class="step fi">
+      <span class="step-num">04</span>
+      <div class="step-content">
+        <h3>Owners and crew build on it over time</h3>
+        <p>The platform grows with the vessel. Crew log faults and fixes, owners track history, builders stay connected. Every entry enriches the record — through crew changes, refits, and ownership transitions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 05 Owners ── -->
+<section id="owners">
+  <div class="section-eyebrow">
+    <span class="sec-num">05</span>
+    <span class="sec-label">For Owners &amp; Crew</span>
+  </div>
+  <h2 class="sec-heading fi">The yacht's knowledge,<em>always with the yacht.</em></h2>
+  <p class="sec-body fi">From the moment a yacht enters service, it starts generating knowledge. MyYachtHub makes sure none of it is lost.</p>
+  <div class="owners-grid">
+    <div class="ocard fi">
+      <div class="ocard-bg" style="background-image:url('https://d2xsxph8kpxj0f.cloudfront.net/310519663544723831/7NQfELuxwy5fSmFwMPnP8u/myh-owner-kCfxZxvHbZdryCc7ZaiXb6.webp')"></div>
+      <div class="ocard-ov"></div>
+      <div class="ocard-cnt">
+        <p class="ocard-lbl">For Owners</p>
+        <h3>The yacht's knowledge,<em>always with the yacht.</em></h3>
+        <p>A complete, evolving record of the vessel — through crew changes, refits, and ownership transitions.</p>
+      </div>
+    </div>
+    <div class="ocard fi">
+      <div class="ocard-bg" style="background-image:url('https://d2xsxph8kpxj0f.cloudfront.net/310519663544723831/7NQfELuxwy5fSmFwMPnP8u/myh-crew-Xf4L2RKLn7ptzYf7YBD76K.webp')"></div>
+      <div class="ocard-ov"></div>
+      <div class="ocard-cnt">
+        <p class="ocard-lbl">For Crew</p>
+        <h3>Knowledge stays<em>with the yacht.</em></h3>
+        <p>Instantly locate any system, understand it, and troubleshoot — without relying on whoever was here before.</p>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:3rem;padding:2rem 2.5rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-left:2px solid var(--gold);max-width:700px;" class="fi">
+    <p style="font-size:0.88rem;color:rgba(255,255,255,0.58);line-height:1.9;">Most builders hand over a folder of PDFs and step back. MyYachtHub turns every yacht into a connected product — and gives builders a living relationship with every vessel they deliver.</p>
+  </div>
+</section>
+
+<!-- ── 06 Builders ── -->
+<section id="builders" class="builders-section">
+  <div class="section-eyebrow">
+    <span class="sec-num">06</span>
+    <span class="sec-label">For Builders</span>
+  </div>
+  <h2 class="sec-heading fi">Built for builders.<em>Delivered with every yacht.</em></h2>
+  <p class="sec-body fi">MyYachtHub is fully white-labelled — your brand, your hub. Designed to be delivered as part of every yacht, turning after-sales from a cost centre into a structured, data-driven part of the business.</p>
+  <div class="builder-cards">
+    <div class="bcard fi">
+      <p class="bcard-title">Improves Handover Experience</p>
+      <p>Deliver a fully structured, branded knowledge hub with every yacht — not a folder of PDFs.</p>
+    </div>
+    <div class="bcard fi">
+      <p class="bcard-title">Reduces Support &amp; Warranty Friction</p>
+      <p>Structured workflows and full vessel context make after-sales faster and more effective for everyone.</p>
+    </div>
+    <div class="bcard fi">
+      <p class="bcard-title">Creates a Direct Aftersales Channel</p>
+      <p>Maintain a live connection with every vessel you deliver — for its entire service life.</p>
+    </div>
+    <div class="bcard fi">
+      <p class="bcard-title">Standardises Knowledge Across Models</p>
+      <p>Build once, deploy across your fleet. Consistent, structured information across every vessel you produce.</p>
+    </div>
+  </div>
+  <div class="bquote fi">
+    <p>"Turns every yacht into a connected product, not a static delivery."</p>
+  </div>
+</section>
+
+<!-- ── 07 Vision ── -->
+<section id="vision">
+  <div class="section-eyebrow">
+    <span class="sec-num">07</span>
+    <span class="sec-label">The Vision</span>
+  </div>
+  <h2 class="sec-heading fi">More than a tool.<em>A new standard.</em></h2>
+  <p class="sec-body fi">The marine industry has not yet seen a product that combines builder integration, visual-first interaction, and lifecycle continuity. MyYachtHub is designed to define a new category — not just improve an existing one.</p>
+  <div class="vision-cards">
+    <div class="vcard fi"><p>Designed to become the default knowledge system for yachts</p></div>
+    <div class="vcard fi"><p>Works across builders, models, and vessel types</p></div>
+    <div class="vcard fi"><p>Persists across the entire lifecycle</p></div>
+  </div>
+  <div class="vision-quote fi">
+    <blockquote>"Yachting is built around precision, craftsmanship, and attention to detail. The way yacht knowledge is managed should reflect the same standard."</blockquote>
+    <p class="vision-tagline">MyYachtHub — This should exist on every yacht.</p>
+  </div>
+</section>
+
+<!-- ── 08 Contact ── -->
+<section id="contact" class="contact-section">
+  <div class="section-eyebrow">
+    <span class="sec-num">08</span>
+    <span class="sec-label">Get In Touch</span>
+  </div>
+  <h2 class="sec-heading fi">Let's build the future<em>of yacht ownership.</em></h2>
+  <p class="sec-body fi">Whether you are a yacht builder interested in white-labelling the platform, an owner or crew member who wants to explore what MyYachtHub can do for your vessel, or an investor who sees the opportunity — we would love to hear from you.</p>
+  <div class="contact-grid">
+    <div class="contact-info fi">
+      <h3>Email</h3>
+      <p>hello@myyachthub.com</p>
+      <h3>Location</h3>
+      <p>London, United Kingdom</p>
+    </div>
+    <form class="contact-form fi" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Full Name *</label>
+          <input type="text" placeholder="Your name" required />
+        </div>
+        <div class="form-field">
+          <label>Email *</label>
+          <input type="email" placeholder="your@email.com" required />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Company / Vessel</label>
+        <input type="text" placeholder="Builder, company or vessel name" />
+      </div>
+      <div class="form-field">
+        <label>I Am A...</label>
+        <select>
+          <option value="">Select your role</option>
+          <option>Yacht Builder</option>
+          <option>Yacht Owner</option>
+          <option>Crew Member</option>
+          <option>Investor</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Message *</label>
+        <textarea placeholder="Tell us about your interest in MyYachtHub..." required></textarea>
+      </div>
+      <button type="submit" class="btn-gold">Send Message &rarr;</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">
+        <svg viewBox="0 0 80 90" fill="none" stroke="#c9a96e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="40" cy="12" r="8"/>
+          <line x1="40" y1="20" x2="40" y2="78"/>
+          <line x1="18" y1="32" x2="62" y2="32"/>
+          <path d="M40 78 C20 78 12 62 12 62"/>
+          <path d="M40 78 C60 78 68 62 68 62"/>
+          <path d="M12 62 C8 56 16 50 20 56"/>
+          <path d="M68 62 C72 56 64 50 60 56"/>
+          <circle cx="18" cy="32" r="2.5" fill="#c9a96e" stroke="none"/>
+          <circle cx="62" cy="32" r="2.5" fill="#c9a96e" stroke="none"/>
+        </svg>
+        <span class="footer-logo-name">MyYachtHub</span>
+      </div>
+      <p class="footer-tagline">A lifecycle knowledge platform for yachts. Built for builders, owners, and crew.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul class="footer-nav">
+        <li><a href="#platform">The Platform</a></li>
+        <li><a href="#builders">For Builders</a></li>
+        <li><a href="#owners">For Owners &amp; Crew</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#vision">The Vision</a></li>
+        <li><a href="#contact">Get in Touch</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Our Promise</h4>
+      <p class="footer-promise">"This should exist on every yacht."</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 MyYachtHub. All rights reserved.</p>
+    <a href="mailto:hello@myyachthub.com">hello@myyachthub.com</a>
+  </div>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id === '#') return;
+      const t = document.querySelector(id);
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // Nav opacity on scroll
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 60
+      ? 'rgba(8,14,20,0.97)'
+      : 'rgba(8,14,20,0.88)';
+  });
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Message Sent ✓';
+    btn.style.borderColor = '#c9a96e';
+    btn.style.color = '#c9a96e';
+    btn.disabled = true;
+  }
+</script>
+</body>
 </html>
