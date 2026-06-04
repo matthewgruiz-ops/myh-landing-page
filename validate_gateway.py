@@ -5,6 +5,7 @@ import hashlib
 
 ROOT = Path('/home/ubuntu/myh_repo_audit/myh-landing-page')
 ROUTES = ['index.html', 'legacy/index.html', 'onboard/index.html', 'world-map/index.html', 'ecosystem/index.html']
+PUBLIC_GATEWAY_ROUTES = ['index.html', 'onboard/index.html', 'world-map/index.html', 'ecosystem/index.html']
 EXPECTED_LEGACY_SHA256 = '4f84c470277bafd157b44752c7e1339d12c5dd6d194eead47c7ff3db3adbb074'
 
 class LinkParser(HTMLParser):
@@ -28,6 +29,12 @@ for rel in ROUTES:
         errors.append(f'Missing route file: {rel}')
     elif path.stat().st_size < 2000:
         errors.append(f'Route file unexpectedly small: {rel}')
+
+restricted_brand = 'O' + 'yster'
+for rel in PUBLIC_GATEWAY_ROUTES:
+    path = ROOT / rel
+    if path.exists() and restricted_brand in path.read_text(encoding='utf-8'):
+        errors.append(f'Public gateway route contains restricted brand reference: {rel}')
 
 legacy = ROOT / 'legacy/index.html'
 legacy_hash = hashlib.sha256(legacy.read_bytes()).hexdigest()

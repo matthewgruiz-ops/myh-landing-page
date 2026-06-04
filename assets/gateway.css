@@ -129,3 +129,14 @@ p { color: var(--muted); margin: 0; }
   color: var(--cream);
   font-weight: 700;
 }
+
+.panel-title {
+  font-size: clamp(2rem, 3.2vw, 3.5rem);
+  letter-spacing: -0.035em;
+}
+
+.panel-copy {
+  color: rgba(255,255,255,0.72);
+  font-size: 1.04rem;
+  max-width: 34rem;
+}

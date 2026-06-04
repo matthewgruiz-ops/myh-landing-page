@@ -5,7 +5,7 @@ Date: **2026-06-04**
 
 ## Purpose
 
-This document records how the updated **MyYachtHub public gateway** should be reviewed, deployed, and rolled back. The implementation intentionally changes only the `myh-landing-page` repository. It does **not** delete, overwrite, or merge the existing **Vessel Knowledge Platform**, **Onboard**, or **Oyster World Map** applications.
+This document records how the updated **MyYachtHub public gateway** should be reviewed, deployed, and rolled back. The implementation intentionally changes only the `myh-landing-page` repository. It does **not** delete, overwrite, or merge the existing **Vessel Knowledge Platform**, **Onboard**, or **World Map** applications.
 
 ## Changed repository
 
@@ -27,7 +27,7 @@ The new gateway positions **MYH** as the parent brand and provides short, polish
 | Current MYH legacy landing page | `matthewgruiz-ops/myh-landing-page` | Keep the preserved page available at `/legacy/` and do not delete its assets. |
 | Vessel Knowledge Platform | `matthewgruiz-ops/myh-platform` | Leave `app.myyachthub.co.uk` and platform routes untouched. Do not merge Onboard or World Map into this app. |
 | Onboard | `matthewgruiz-ops/myh-onboard` | Treat as an existing standalone app. The gateway only provides a public access page at `/onboard/`. |
-| Oyster World Map | `matthewgruiz-ops/myh-world-map` | Treat as an existing standalone app. The gateway only provides a public access page at `/world-map/`. |
+| World Map | `matthewgruiz-ops/myh-world-map` | Treat as an existing standalone app. The gateway only provides a public access page at `/world-map/`. |
 
 ## Route plan
 
@@ -36,7 +36,7 @@ The new gateway positions **MYH** as the parent brand and provides short, polish
 | `/` | New parent MYH gateway homepage. | Safe to deploy after review. |
 | `/legacy/` | Preserved previous landing page. | Used as rollback-visible archive and proof that the old page was not deleted. |
 | `/onboard/` | Short Onboard product/access page. | Does not link to `onboard.myyachthub.co.uk` until the standalone app is live. |
-| `/world-map/` | Short Oyster World Map product/access page. | Does not link to `map.myyachthub.co.uk` until the standalone map app is live. |
+| `/world-map/` | Short World Map product/access page. | Does not link to `map.myyachthub.co.uk` until the standalone map app is live. |
 | `/ecosystem/` | Demo page with **Fix**, **Plan**, and **Connect** sections. | Fix and Plan route internally to product access pages; Connect is a complete Coming Soon section. |
 | `app.myyachthub.co.uk` | External protected platform link. | No platform changes were made. |
 
@@ -47,7 +47,7 @@ The gateway can be reviewed and deployed independently from the standalone produ
 | Product | Intended standalone domain | Required before enabling direct public CTAs |
 |---|---|---|
 | Onboard | `onboard.myyachthub.co.uk` | Deploy the existing `myh-onboard` app with its database, OAuth/session configuration, owner identity settings, and storage-related variables. |
-| Oyster World Map | `map.myyachthub.co.uk` | Deploy the existing `myh-world-map` app with its database, JWT secret, admin email list, and optional notification/storage variables. |
+| World Map | `map.myyachthub.co.uk` | Deploy the existing `myh-world-map` app with its database, JWT secret, admin email list, and optional notification/storage variables. |
 
 Until those deployments are confirmed live, this branch deliberately keeps product CTAs on internal access anchors and email request links. This avoids sending visitors to unavailable subdomains while preserving the final domain architecture.
 
