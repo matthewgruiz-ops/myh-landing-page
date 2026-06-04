@@ -66,6 +66,7 @@ p { color: var(--muted); margin: 0; }
 .button.primary { background: var(--gold); border-color: var(--gold); color: #071019; }
 .button.primary:hover { background: var(--gold-2); }
 .button.ghost { color: var(--cream); }
+.button.disabled { color: rgba(255,255,255,0.48); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.035); cursor: default; pointer-events: none; }
 .section { padding: 76px 0; }
 .section-head { max-width: 760px; margin-bottom: 34px; }
 .section-head p { margin-top: 14px; font-size: 1.05rem; }
@@ -73,8 +74,8 @@ p { color: var(--muted); margin: 0; }
 .card { min-height: 100%; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px; background: rgba(255,255,255,0.055); box-shadow: 0 18px 55px rgba(0,0,0,0.18); display: flex; flex-direction: column; gap: 18px; }
 .card .tag { color: var(--teal); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.68rem; font-weight: 700; }
 .card p { color: rgba(255,255,255,0.66); }
-.card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
-.card-actions .button { min-height: 40px; padding: 0 13px; font-size: 0.64rem; }
+.card-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: auto; align-items: stretch; }
+.card-actions .button { min-height: 44px; width: 100%; padding: 0 14px; font-size: 0.66rem; text-align: center; white-space: nowrap; }
 .product-hero { padding: 84px 0 54px; }
 .product-hero .container { max-width: 960px; }
 .product-summary { margin-top: 22px; font-size: 1.2rem; max-width: 800px; }
@@ -100,6 +101,7 @@ p { color: var(--muted); margin: 0; }
   .nav-links { width: 100%; flex-wrap: wrap; overflow-x: visible; padding-bottom: 0; gap: 12px 16px; }
   .split { grid-template-columns: 1fr; }
   .card-grid, .ecosystem-grid, .info-strip { grid-template-columns: 1fr; }
+  .card-actions { max-width: 520px; }
   .hero { padding: 58px 0 34px; }
   .hero-grid { max-width: 760px; }
 }
@@ -113,6 +115,10 @@ p { color: var(--muted); margin: 0; }
   .hero-copy { font-size: 1rem; line-height: 1.62; margin-top: 18px; }
   .section, .product-hero { padding: 54px 0; }
   .card, .ecosystem-card { border-radius: 20px; padding: 20px; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .actions .button { width: 100%; }
+  .card-actions { grid-template-columns: 1fr; max-width: none; }
+  .card-actions .button { min-height: 46px; }
 }
 
 .domain-note {

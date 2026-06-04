@@ -74,7 +74,7 @@ home = header('home') + '''
     <div class="section-head">
       <p class="eyebrow">Product portals</p>
       <h2 id="products-title">Choose the right MYH product.</h2>
-      <p>Three simple access points for the MYH product family. Each card introduces the product and routes visitors to a focused access page before any standalone app subdomain is enabled.</p>
+      <p>Three simple access points for the MYH product family. Each card introduces the product with one clear action and one calm secondary route, while standalone app links remain internal until the live subdomains are tested.</p>
     </div>
     <div class="card-grid">
       <article class="card">
@@ -82,9 +82,8 @@ home = header('home') + '''
         <h3>Maintenance and issue flow for real boats.</h3>
         <p>Report faults, track fixes, record parts and costs, and keep onboard maintenance flowing clearly.</p>
         <div class="card-actions">
-          <a class="button primary" href="/onboard/">Find out more</a>
-          <a class="button" href="/onboard/#app-access">Log in / Open app</a>
-          <a class="button" href="mailto:hello@myyachthub.com?subject=Onboard%20access%20request">Request access</a>
+          <a class="button primary" href="/onboard/">Learn more</a>
+          <a class="button" href="/onboard/#app-access">Access status</a>
         </div>
       </article>
       <article class="card">
@@ -92,9 +91,8 @@ home = header('home') + '''
         <h3>Cruising intelligence and destination planning.</h3>
         <p>A premium cruising intelligence map for anchorages, local contacts, recommendations, owner knowledge and destination planning.</p>
         <div class="card-actions">
-          <a class="button primary" href="/world-map/">Find out more</a>
-          <a class="button" href="/world-map/#map-access">Open map</a>
-          <a class="button" href="mailto:hello@myyachthub.com?subject=World%20Map%20access%20request">Request access</a>
+          <a class="button primary" href="/world-map/">Learn more</a>
+          <a class="button" href="/world-map/#map-access">Access status</a>
         </div>
       </article>
       <article class="card">
@@ -103,7 +101,7 @@ home = header('home') + '''
         <p>A demo of how a yacht builder’s digital brand world could bring support, cruising, events and community into one connected experience.</p>
         <div class="card-actions">
           <a class="button primary" href="/ecosystem/">View demo</a>
-          <a class="button" href="/ecosystem/#connect">Find out more</a>
+          <a class="button" href="/ecosystem/#connect">Learn more</a>
         </div>
       </article>
     </div>
@@ -115,7 +113,7 @@ home = header('home') + '''
       <p class="eyebrow">Access</p>
       <h2>Built as separate products, connected by one public story.</h2>
     </div>
-    <div class="notice">The Vessel Knowledge Platform remains separate at <strong>app.myyachthub.co.uk</strong>. Onboard and World Map are linked as standalone products and are not merged into the platform app.</div>
+    <div class="notice">Interested in pilot access or a builder demo? Use the single Request Access button in the header to contact MYH. The Vessel Knowledge Platform remains separate at <strong>app.myyachthub.co.uk</strong>; Onboard and World Map are linked as standalone products and are not merged into the platform app.</div>
   </div>
 </section>
 ''' + footer()
@@ -127,9 +125,8 @@ onboard = header('onboard') + '''
     <h1>The living maintenance memory for your boat.</h1>
     <p class="product-summary">Onboard helps owners and crew report faults, track fixes, capture service history, record costs and manage practical maintenance without rebuilding the existing app.</p>
     <div class="actions">
-      <a class="button primary" href="#app-access">Open app</a>
-      <a class="button" href="mailto:hello@myyachthub.com?subject=Onboard%20demo%20request">View demo</a>
-      <a class="button" href="mailto:hello@myyachthub.com?subject=Onboard%20access%20request">Sign up / Request access</a>
+      <a class="button primary" href="mailto:hello@myyachthub.com?subject=Onboard%20access%20request">Request access</a>
+      <span class="button disabled" aria-disabled="true">App access coming online</span>
     </div>
     <div class="info-strip">
       <div class="info-item"><strong>Faults and fixes</strong><p>Log issues, urgency, photos and resolution flow.</p></div>
@@ -157,9 +154,8 @@ world_map = header('world-map') + '''
     <h1>Cruising intelligence, owner knowledge and destination planning.</h1>
     <p class="product-summary">The World Map gives sailors, owners and managers a premium route into anchorages, local contacts, recommendations, owner notes and destination planning using the existing map application.</p>
     <div class="actions">
-      <a class="button primary" href="#map-access">Open map</a>
-      <a class="button" href="mailto:hello@myyachthub.com?subject=World%20Map%20login%20or%20signup%20request">Log in / Sign up</a>
-      <a class="button" href="mailto:hello@myyachthub.com?subject=World%20Map%20access%20request">Request access</a>
+      <a class="button primary" href="mailto:hello@myyachthub.com?subject=World%20Map%20access%20request">Request access</a>
+      <span class="button disabled" aria-disabled="true">Map access coming online</span>
     </div>
     <div class="info-strip">
       <div class="info-item"><strong>Anchorages</strong><p>Explore destination notes and practical local knowledge.</p></div>
