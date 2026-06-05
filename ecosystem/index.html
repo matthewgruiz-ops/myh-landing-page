@@ -1,19 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="access-locked">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyYachtHub — Digital Products for Yachts</title>
   <meta name="description" content="MyYachtHub creates elegant, practical digital tools for yacht brands, owners, crew and managers." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.myyachthub.co.uk/" />
   <meta property="og:title" content="MyYachtHub — Digital Products for Yachts" />
-  <meta property="og:description" content="A calm public gateway to Onboard, World Map and the MYH digital ecosystem demo." />
+  <meta property="og:description" content="A calm public gateway to the Manual Platform, Onboard, World Map and the MYH digital ecosystem demo." />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/gateway.css" />
+  <script src="/assets/access-config.js" defer></script>
+  <script src="/assets/access-gate.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -25,6 +28,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary navigation">
       <a href="/">Home</a>
+      <a href="/manual-platform/">Manual Platform</a>
       <a href="/onboard/">Onboard</a>
       <a href="/world-map/">World Map</a>
       <a href="/ecosystem/" aria-current="page">Ecosystem</a>
@@ -33,41 +37,59 @@
   </div>
 </header>
 <main id="main">
-<section class="product-hero">
+<section class="section access-panel" data-route-gate hidden>
+  <div class="container access-card">
+    <div>
+      <p class="eyebrow">Private preview</p>
+      <h2>Access is by invitation for this stage.</h2>
+      <p>Enter your access code from the gateway to view this product/demo page. If you do not have a code, request access and MYH will confirm the right demo route for you.</p>
+    </div>
+    <form class="access-form" data-access-form>
+      <label for="access-code-ecosystem">Access code</label>
+      <div class="access-form-row">
+        <input id="access-code-ecosystem" name="access-code" type="password" autocomplete="off" placeholder="Enter access code" />
+        <button class="button primary" type="submit">Unlock</button>
+      </div>
+      <p class="access-message" data-access-message></p>
+      <a class="request-link" href="mailto:hello@myyachthub.com?subject=MYH%20access%20request">Request access instead</a>
+    </form>
+  </div>
+</section>
+<section class="product-hero" data-gated-route>
   <div class="container">
     <p class="eyebrow">Digital Ecosystem Demo</p>
     <h1>A premium builder brand world for support, cruising and community.</h1>
     <p class="product-summary">This demo shows how a yacht builder could connect practical support, cruising intelligence, events, owner stories and brand updates into one calm digital experience.</p>
   </div>
 </section>
-<section class="section" id="ecosystem-areas">
+<section class="section" id="ecosystem-areas" data-gated-route>
   <div class="container">
     <div class="ecosystem-grid">
       <article class="ecosystem-card" id="fix">
         <span class="number">01 / Fix</span>
-        <h3>Support and issue tracking.</h3>
-        <p>Support, fault reporting, troubleshooting, maintenance history and onboard issue tracking.</p>
-        <div class="card-actions"><a class="button primary" href="/onboard/">Open Fix</a><a class="button" href="/onboard/#app-access">Open Onboard</a></div>
+        <h3>Support, troubleshooting and maintenance flow.</h3>
+        <p>Fault reporting, troubleshooting, support requests, maintenance history, parts used, cost tracking and owner/builder support flow should be powered by Onboard rather than copied into a separate Fix app.</p>
+        <div class="card-actions"><a class="button primary" href="/onboard/">View Fix wrapper</a><a class="button" href="/onboard/#app-access">Open Onboard status</a></div>
       </article>
       <article class="ecosystem-card" id="plan">
         <span class="number">02 / Plan</span>
-        <h3>Cruising intelligence and owner knowledge.</h3>
-        <p>Cruising intelligence, anchorages, contacts, recommendations, owner knowledge and destination planning.</p>
-        <div class="card-actions"><a class="button primary" href="/world-map/">Open Plan</a><a class="button" href="/world-map/#map-access">Open Map</a></div>
+        <h3>Cruising intelligence, trips and yacht admin.</h3>
+        <p>World map intelligence sits beside rally planning, itineraries, budgets, pre-departure checklists, destination notes, useful contacts and trip admin. The map layer should be powered by World Map rather than duplicated.</p>
+        <div class="card-actions"><a class="button primary" href="/world-map/">View Plan wrapper</a><a class="button" href="/world-map/#map-access">Open Map status</a></div>
       </article>
       <article class="ecosystem-card" id="connect">
         <span class="number">03 / Connect</span>
-        <h3>Owner stories, events and brand updates.</h3>
-        <p>Events, owner stories, community, experiences and brand updates for a premium yacht builder’s digital world.</p>
+        <h3>Events, owner stories and brand communications.</h3>
+        <p>Events, owner stories, brand communications, community, offers, service updates and optional owner-to-owner connection. This remains a polished demo area until a dedicated product scope is confirmed.</p>
         <span class="coming-soon">Coming soon</span>
       </article>
     </div>
   </div>
 </section>
-<section class="section">
+<section class="section" data-gated-route>
   <div class="container split">
-    <div class="section-head"><p class="eyebrow">Demo principle</p><h2>Polished, practical and not cluttered.</h2></div>
-    <div class="notice">Fix and Plan point to existing MYH products. Connect is intentionally shown as a finished Coming Soon area, not a broken or empty route.</div>
+    <div class="section-head"><p class="eyebrow">Demo principle</p><h2>Build once as MYH core, then wrap or theme for the ecosystem demo.</h2></div>
+    <div class="notice">Fix points to Onboard and Plan points to World Map. The ecosystem should frame, theme, link to or demonstrate core products rather than forking them into duplicate applications.</div>
   </div>
 </section>
 </main>
@@ -76,7 +98,7 @@
     <p>© MyYachtHub. Digital products for yachts, owners, crew, managers and builders.</p>
     <div class="footer-links">
       <a href="/legacy/">Legacy site</a>
-      <a href="https://app.myyachthub.co.uk">Vessel Knowledge Platform</a>
+      <a href="/manual-platform/">Manual Platform</a>
       <a href="mailto:hello@myyachthub.com">Contact</a>
     </div>
   </div>

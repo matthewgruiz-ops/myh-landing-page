@@ -133,3 +133,58 @@ p { color: var(--muted); margin: 0; }
   font-weight: 700;
 }
 
+
+/* Access gate and four-product gateway additions */
+.access-panel { padding-top: 28px; }
+.access-card {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 28px;
+  align-items: center;
+  border: 1px solid rgba(201,169,110,0.28);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(201,169,110,0.10), rgba(255,255,255,0.045));
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+.access-card h2 { font-size: clamp(2rem, 3vw, 3.15rem); }
+.access-card p { margin-top: 12px; }
+.access-form { display: grid; gap: 12px; }
+.access-form label { color: var(--cream); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.68rem; }
+.access-form-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+.access-form input {
+  min-height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(7,16,25,0.66);
+  color: var(--white);
+  padding: 0 16px;
+  font: inherit;
+}
+.access-form input:focus { outline: 2px solid rgba(201,169,110,0.55); outline-offset: 2px; }
+.access-message { min-height: 1.4em; font-size: 0.9rem; color: var(--muted); }
+.access-message[data-state="success"] { color: var(--teal); }
+.access-message[data-state="error"] { color: #f0b8a8; }
+.request-link { color: var(--gold); text-decoration: none; font-size: 0.9rem; }
+.request-link:hover { color: var(--gold-2); }
+.access-locked [data-gated] { display: none; }
+.access-unlocked [data-gated] { display: block; }
+.access-unlocked [data-route-gate] { display: none; }
+[data-gated-route][hidden], [data-route-gate][hidden] { display: none; }
+.four-card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.gated-products:focus { outline: none; }
+
+@media (max-width: 1120px) {
+  .four-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .access-card { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .access-card { padding: 22px; border-radius: 20px; }
+  .access-form-row { grid-template-columns: 1fr; }
+  .access-form-row .button { width: 100%; }
+  .four-card-grid { grid-template-columns: 1fr; }
+}

@@ -1,19 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="access-locked">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyYachtHub — Digital Products for Yachts</title>
   <meta name="description" content="MyYachtHub creates elegant, practical digital tools for yacht brands, owners, crew and managers." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.myyachthub.co.uk/" />
   <meta property="og:title" content="MyYachtHub — Digital Products for Yachts" />
-  <meta property="og:description" content="A calm public gateway to Onboard, World Map and the MYH digital ecosystem demo." />
+  <meta property="og:description" content="A calm public gateway to the Manual Platform, Onboard, World Map and the MYH digital ecosystem demo." />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/gateway.css" />
+  <script src="/assets/access-config.js" defer></script>
+  <script src="/assets/access-gate.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -25,6 +28,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary navigation">
       <a href="/">Home</a>
+      <a href="/manual-platform/">Manual Platform</a>
       <a href="/onboard/" aria-current="page">Onboard</a>
       <a href="/world-map/">World Map</a>
       <a href="/ecosystem/">Ecosystem</a>
@@ -33,7 +37,25 @@
   </div>
 </header>
 <main id="main">
-<section class="product-hero">
+<section class="section access-panel" data-route-gate hidden>
+  <div class="container access-card">
+    <div>
+      <p class="eyebrow">Private preview</p>
+      <h2>Access is by invitation for this stage.</h2>
+      <p>Enter your access code from the gateway to view this product/demo page. If you do not have a code, request access and MYH will confirm the right demo route for you.</p>
+    </div>
+    <form class="access-form" data-access-form>
+      <label for="access-code-onboard">Access code</label>
+      <div class="access-form-row">
+        <input id="access-code-onboard" name="access-code" type="password" autocomplete="off" placeholder="Enter access code" />
+        <button class="button primary" type="submit">Unlock</button>
+      </div>
+      <p class="access-message" data-access-message></p>
+      <a class="request-link" href="mailto:hello@myyachthub.com?subject=MYH%20access%20request">Request access instead</a>
+    </form>
+  </div>
+</section>
+<section class="product-hero" data-gated-route>
   <div class="container">
     <p class="eyebrow">Onboard</p>
     <h1>The living maintenance memory for your boat.</h1>
@@ -49,7 +71,7 @@
     </div>
   </div>
 </section>
-<section class="section" id="app-access">
+<section class="section" id="app-access" data-gated-route>
   <div class="container split">
     <div class="section-head"><p class="eyebrow">What it supports</p><h2>Clear onboard operations for owners and crew.</h2><p class="domain-note">Standalone app target: <strong>onboard.myyachthub.co.uk</strong>. This page avoids linking to that subdomain until the existing Onboard app deployment is live.</p></div>
     <div class="feature-list">
@@ -65,7 +87,7 @@
     <p>© MyYachtHub. Digital products for yachts, owners, crew, managers and builders.</p>
     <div class="footer-links">
       <a href="/legacy/">Legacy site</a>
-      <a href="https://app.myyachthub.co.uk">Vessel Knowledge Platform</a>
+      <a href="/manual-platform/">Manual Platform</a>
       <a href="mailto:hello@myyachthub.com">Contact</a>
     </div>
   </div>

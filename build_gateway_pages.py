@@ -1,29 +1,123 @@
+import os
 from pathlib import Path
 
 ROOT = Path('/home/ubuntu/myh_repo_audit/myh-landing-page')
 
 LOGO = '''<svg class="brand-mark" viewBox="0 0 48 56" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L39 15V41L24 52L9 41V15L24 4Z" stroke="#c9a96e" stroke-width="2"/><path d="M24 12V44" stroke="#f2ead6" stroke-width="1.6"/><path d="M15 29C18 24 21 21.5 24 21.5C27 21.5 30 24 33 29" stroke="#77c6c2" stroke-width="1.6" stroke-linecap="round"/><path d="M16 35C21 38 27 38 32 35" stroke="#c9a96e" stroke-width="1.6" stroke-linecap="round"/></svg>'''
 
+ACCESS_CONFIG_JS = '''window.MYH_GATEWAY_ACCESS = {
+  hash: "__ACCESS_HASH__",
+  storageKey: "myh_gateway_access_unlocked"
+};
+'''
+
+ACCESS_GATE_JS = '''(function () {
+  const config = window.MYH_GATEWAY_ACCESS || {};
+  const storageKey = config.storageKey || 'myh_gateway_access_unlocked';
+  const configuredHash = typeof config.hash === 'string' ? config.hash.trim().toLowerCase() : '';
+  const hasCrypto = window.crypto && window.crypto.subtle && window.TextEncoder;
+
+  function markUnlocked() {
+    document.documentElement.classList.add('access-unlocked');
+    document.documentElement.classList.remove('access-locked');
+    try { window.sessionStorage.setItem(storageKey, 'true'); } catch (error) {}
+  }
+
+  function markLocked() {
+    document.documentElement.classList.add('access-locked');
+    document.documentElement.classList.remove('access-unlocked');
+  }
+
+  function isUnlocked() {
+    try { return window.sessionStorage.getItem(storageKey) === 'true'; } catch (error) { return false; }
+  }
+
+  async function sha256(value) {
+    const buffer = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(buffer)).map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  function setMessage(form, message, type) {
+    const target = form.querySelector('[data-access-message]');
+    if (!target) return;
+    target.textContent = message;
+    target.dataset.state = type || 'neutral';
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const input = form.querySelector('input[name="access-code"]');
+    const value = input ? input.value.trim() : '';
+
+    if (!configuredHash) {
+      setMessage(form, 'Access-code validation is not configured in this build. Please request access.', 'error');
+      return;
+    }
+
+    if (!hasCrypto) {
+      setMessage(form, 'This browser cannot validate the access code securely. Please request access.', 'error');
+      return;
+    }
+
+    const digest = await sha256(value);
+    if (digest === configuredHash) {
+      markUnlocked();
+      setMessage(form, 'Access unlocked for this session.', 'success');
+      document.querySelectorAll('[data-gated]').forEach((element) => element.removeAttribute('hidden'));
+      const firstGated = document.querySelector('[data-gated]');
+      if (firstGated) firstGated.focus({ preventScroll: false });
+    } else {
+      markLocked();
+      setMessage(form, 'That access code was not recognised. Please check it or request access.', 'error');
+    }
+  }
+
+  function init() {
+    if (isUnlocked()) markUnlocked(); else markLocked();
+
+    document.querySelectorAll('[data-access-form]').forEach((form) => {
+      form.addEventListener('submit', handleSubmit);
+      if (!configuredHash) setMessage(form, 'Access-code validation has not been configured for this build. Request access to continue.', 'neutral');
+    });
+
+    document.querySelectorAll('[data-gated-route]').forEach((route) => {
+      if (!isUnlocked()) {
+        route.setAttribute('hidden', '');
+        const gate = document.querySelector('[data-route-gate]');
+        if (gate) gate.removeAttribute('hidden');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+'''
+
 
 def header(active="home"):
     def current(name):
         return ' aria-current="page"' if active == name else ''
     return f'''<!doctype html>
-<html lang="en">
+<html lang="en" class="access-locked">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyYachtHub — Digital Products for Yachts</title>
   <meta name="description" content="MyYachtHub creates elegant, practical digital tools for yacht brands, owners, crew and managers." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.myyachthub.co.uk/" />
   <meta property="og:title" content="MyYachtHub — Digital Products for Yachts" />
-  <meta property="og:description" content="A calm public gateway to Onboard, World Map and the MYH digital ecosystem demo." />
+  <meta property="og:description" content="A calm public gateway to the Manual Platform, Onboard, World Map and the MYH digital ecosystem demo." />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/gateway.css" />
+  <script src="/assets/access-config.js" defer></script>
+  <script src="/assets/access-gate.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -35,6 +129,7 @@ def header(active="home"):
     </a>
     <nav class="nav-links" aria-label="Primary navigation">
       <a href="/"{current('home')}>Home</a>
+      <a href="/manual-platform/"{current('manual')}>Manual Platform</a>
       <a href="/onboard/"{current('onboard')}>Onboard</a>
       <a href="/world-map/"{current('world-map')}>World Map</a>
       <a href="/ecosystem/"{current('ecosystem')}>Ecosystem</a>
@@ -45,6 +140,29 @@ def header(active="home"):
 <main id="main">'''
 
 
+def access_panel(context="home"):
+    prompt = "Enter your access code to reveal the available MYH products and demos." if context == "home" else "Enter your access code from the gateway to view this product/demo page."
+    return f'''
+<section class="section access-panel" data-route-gate{' hidden' if context != 'home' else ''}>
+  <div class="container access-card">
+    <div>
+      <p class="eyebrow">Private preview</p>
+      <h2>Access is by invitation for this stage.</h2>
+      <p>{prompt} If you do not have a code, request access and MYH will confirm the right demo route for you.</p>
+    </div>
+    <form class="access-form" data-access-form>
+      <label for="access-code-{context}">Access code</label>
+      <div class="access-form-row">
+        <input id="access-code-{context}" name="access-code" type="password" autocomplete="off" placeholder="Enter access code" />
+        <button class="button primary" type="submit">Unlock</button>
+      </div>
+      <p class="access-message" data-access-message></p>
+      <a class="request-link" href="mailto:hello@myyachthub.com?subject=MYH%20access%20request">Request access instead</a>
+    </form>
+  </div>
+</section>'''
+
+
 def footer():
     return '''</main>
 <footer class="footer">
@@ -52,7 +170,7 @@ def footer():
     <p>© MyYachtHub. Digital products for yachts, owners, crew, managers and builders.</p>
     <div class="footer-links">
       <a href="/legacy/">Legacy site</a>
-      <a href="https://app.myyachthub.co.uk">Vessel Knowledge Platform</a>
+      <a href="/manual-platform/">Manual Platform</a>
       <a href="mailto:hello@myyachthub.com">Contact</a>
     </div>
   </div>
@@ -66,42 +184,52 @@ home = header('home') + '''
   <div class="container hero-grid">
     <p class="eyebrow">MyYachtHub</p>
     <h1>Digital products that make yachts easier to use, manage and understand.</h1>
-    <p class="hero-copy">MyYachtHub creates elegant, practical digital tools for yacht brands, owners, crew and managers — connecting onboard support, cruising intelligence and branded digital experiences through one clear product family.</p>
+    <p class="hero-copy">From digital vessel manuals and onboard maintenance to cruising intelligence and branded owner ecosystems, MYH creates practical tools for yacht builders, owners, crew and managers.</p>
   </div>
 </section>
-<section class="section" aria-labelledby="products-title">
+''' + access_panel('home') + '''
+<section class="section gated-products" aria-labelledby="products-title" data-gated tabindex="-1">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">Product portals</p>
       <h2 id="products-title">Choose the right MYH product.</h2>
-      <p>Three simple access points for the MYH product family. Each card introduces the product with one clear action and one calm secondary route, while standalone app links remain internal until the live subdomains are tested.</p>
+      <p>Four controlled access points for the MYH product family. App CTAs remain internal until the target deployments are live and tested.</p>
     </div>
-    <div class="card-grid">
+    <div class="card-grid four-card-grid">
+      <article class="card">
+        <span class="tag">Manual Platform</span>
+        <h3>Structured vessel knowledge and builder-controlled information.</h3>
+        <p>Structured digital vessel manuals, systems knowledge, equipment records and builder-controlled vessel information.</p>
+        <div class="card-actions">
+          <a class="button primary" href="/manual-platform/">Find out more</a>
+          <a class="button" href="/manual-platform/#platform-access">Open platform</a>
+        </div>
+      </article>
       <article class="card">
         <span class="tag">Onboard</span>
         <h3>Maintenance and issue flow for real boats.</h3>
-        <p>Report faults, track fixes, record parts and costs, and keep onboard maintenance flowing clearly.</p>
+        <p>Fault reporting, fix tracking, parts, costs, maintenance actions and onboard issue history.</p>
         <div class="card-actions">
-          <a class="button primary" href="/onboard/">Learn more</a>
-          <a class="button" href="/onboard/#app-access">Access status</a>
+          <a class="button primary" href="/onboard/">Find out more</a>
+          <a class="button" href="/onboard/#app-access">Open Onboard</a>
         </div>
       </article>
       <article class="card">
         <span class="tag">World Map</span>
         <h3>Cruising intelligence and destination planning.</h3>
-        <p>A premium cruising intelligence map for anchorages, local contacts, recommendations, owner knowledge and destination planning.</p>
+        <p>Cruising intelligence, anchorages, contacts, recommendations, owner knowledge and destination planning.</p>
         <div class="card-actions">
-          <a class="button primary" href="/world-map/">Learn more</a>
-          <a class="button" href="/world-map/#map-access">Access status</a>
+          <a class="button primary" href="/world-map/">Find out more</a>
+          <a class="button" href="/world-map/#map-access">Open map</a>
         </div>
       </article>
       <article class="card">
         <span class="tag">Digital Ecosystem</span>
-        <h3>A builder brand world, shown as a polished demo.</h3>
-        <p>A demo of how a yacht builder’s digital brand world could bring support, cruising, events and community into one connected experience.</p>
+        <h3>A builder-branded owner world, shown as a polished demo.</h3>
+        <p>A pitch demo showing how a premium yacht builder could bring support, cruising, events and community into one branded owner world.</p>
         <div class="card-actions">
           <a class="button primary" href="/ecosystem/">View demo</a>
-          <a class="button" href="/ecosystem/#connect">Learn more</a>
+          <a class="button" href="/ecosystem/#ecosystem-areas">Find out more</a>
         </div>
       </article>
     </div>
@@ -113,13 +241,42 @@ home = header('home') + '''
       <p class="eyebrow">Access</p>
       <h2>Built as separate products, connected by one public story.</h2>
     </div>
-    <div class="notice">Interested in pilot access or a builder demo? Use the single Request Access button in the header to contact MYH. The Vessel Knowledge Platform remains separate at <strong>app.myyachthub.co.uk</strong>; Onboard and World Map are linked as standalone products and are not merged into the platform app.</div>
+    <div class="notice">Interested in pilot access or a builder demo? Use the Request Access button to contact MYH. The intended app domains are app.myyachthub.co.uk, onboard.myyachthub.co.uk and map.myyachthub.co.uk, but this gateway does not point users to those subdomains until each deployment is live and tested.</div>
   </div>
 </section>
 ''' + footer()
 
-onboard = header('onboard') + '''
-<section class="product-hero">
+manual = header('manual') + access_panel('manual') + '''
+<section class="product-hero" data-gated-route>
+  <div class="container">
+    <p class="eyebrow">Manual Platform</p>
+    <h1>Structured vessel manuals and builder-controlled knowledge.</h1>
+    <p class="product-summary">The Manual Platform is the MYH vessel knowledge layer for structured digital manuals, systems records, equipment references and builder-controlled vessel information.</p>
+    <div class="actions">
+      <a class="button primary" href="mailto:hello@myyachthub.com?subject=Manual%20Platform%20access%20request">Request access</a>
+      <span class="button disabled" aria-disabled="true">Platform access coming online</span>
+    </div>
+    <div class="info-strip">
+      <div class="info-item"><strong>Vessel manuals</strong><p>Organise structured vessel documentation, systems guidance and handover knowledge.</p></div>
+      <div class="info-item"><strong>Equipment records</strong><p>Keep equipment information, reference material and service context findable.</p></div>
+      <div class="info-item"><strong>Builder control</strong><p>Support builder-approved information without merging other apps into the platform.</p></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="platform-access" data-gated-route>
+  <div class="container split">
+    <div class="section-head"><p class="eyebrow">How it fits</p><h2>The knowledge base for vessel-specific information.</h2><p class="domain-note">Standalone platform target: <strong>app.myyachthub.co.uk</strong>. This page avoids linking to that subdomain until the existing Manual / Vessel Knowledge Platform deployment is live and tested.</p></div>
+    <div class="feature-list">
+      <div class="feature"><strong>Find out more.</strong> Use this page as the controlled access point for the Manual Platform.</div>
+      <div class="feature"><strong>Open platform.</strong> Launch the existing platform only once its subdomain deployment is live.</div>
+      <div class="feature"><strong>Request access.</strong> Contact MYH for a builder, owner or manager preview.</div>
+    </div>
+  </div>
+</section>
+''' + footer()
+
+onboard = header('onboard') + access_panel('onboard') + '''
+<section class="product-hero" data-gated-route>
   <div class="container">
     <p class="eyebrow">Onboard</p>
     <h1>The living maintenance memory for your boat.</h1>
@@ -135,7 +292,7 @@ onboard = header('onboard') + '''
     </div>
   </div>
 </section>
-<section class="section" id="app-access">
+<section class="section" id="app-access" data-gated-route>
   <div class="container split">
     <div class="section-head"><p class="eyebrow">What it supports</p><h2>Clear onboard operations for owners and crew.</h2><p class="domain-note">Standalone app target: <strong>onboard.myyachthub.co.uk</strong>. This page avoids linking to that subdomain until the existing Onboard app deployment is live.</p></div>
     <div class="feature-list">
@@ -147,8 +304,8 @@ onboard = header('onboard') + '''
 </section>
 ''' + footer()
 
-world_map = header('world-map') + '''
-<section class="product-hero">
+world_map = header('world-map') + access_panel('world-map') + '''
+<section class="product-hero" data-gated-route>
   <div class="container">
     <p class="eyebrow">World Map</p>
     <h1>Cruising intelligence, owner knowledge and destination planning.</h1>
@@ -164,7 +321,7 @@ world_map = header('world-map') + '''
     </div>
   </div>
 </section>
-<section class="section" id="map-access">
+<section class="section" id="map-access" data-gated-route>
   <div class="container split">
     <div class="section-head"><p class="eyebrow">How to use it</p><h2>A focused access page for the existing map product.</h2><p class="domain-note">Standalone map target: <strong>map.myyachthub.co.uk</strong>. This page avoids linking to that subdomain until the existing World Map deployment is live.</p></div>
     <div class="feature-list">
@@ -176,51 +333,58 @@ world_map = header('world-map') + '''
 </section>
 ''' + footer()
 
-ecosystem = header('ecosystem') + '''
-<section class="product-hero">
+ecosystem = header('ecosystem') + access_panel('ecosystem') + '''
+<section class="product-hero" data-gated-route>
   <div class="container">
     <p class="eyebrow">Digital Ecosystem Demo</p>
     <h1>A premium builder brand world for support, cruising and community.</h1>
     <p class="product-summary">This demo shows how a yacht builder could connect practical support, cruising intelligence, events, owner stories and brand updates into one calm digital experience.</p>
   </div>
 </section>
-<section class="section" id="ecosystem-areas">
+<section class="section" id="ecosystem-areas" data-gated-route>
   <div class="container">
     <div class="ecosystem-grid">
       <article class="ecosystem-card" id="fix">
         <span class="number">01 / Fix</span>
-        <h3>Support and issue tracking.</h3>
-        <p>Support, fault reporting, troubleshooting, maintenance history and onboard issue tracking.</p>
-        <div class="card-actions"><a class="button primary" href="/onboard/">Open Fix</a><a class="button" href="/onboard/#app-access">Open Onboard</a></div>
+        <h3>Support, troubleshooting and maintenance flow.</h3>
+        <p>Fault reporting, troubleshooting, support requests, maintenance history, parts used, cost tracking and owner/builder support flow should be powered by Onboard rather than copied into a separate Fix app.</p>
+        <div class="card-actions"><a class="button primary" href="/onboard/">View Fix wrapper</a><a class="button" href="/onboard/#app-access">Open Onboard status</a></div>
       </article>
       <article class="ecosystem-card" id="plan">
         <span class="number">02 / Plan</span>
-        <h3>Cruising intelligence and owner knowledge.</h3>
-        <p>Cruising intelligence, anchorages, contacts, recommendations, owner knowledge and destination planning.</p>
-        <div class="card-actions"><a class="button primary" href="/world-map/">Open Plan</a><a class="button" href="/world-map/#map-access">Open Map</a></div>
+        <h3>Cruising intelligence, trips and yacht admin.</h3>
+        <p>World map intelligence sits beside rally planning, itineraries, budgets, pre-departure checklists, destination notes, useful contacts and trip admin. The map layer should be powered by World Map rather than duplicated.</p>
+        <div class="card-actions"><a class="button primary" href="/world-map/">View Plan wrapper</a><a class="button" href="/world-map/#map-access">Open Map status</a></div>
       </article>
       <article class="ecosystem-card" id="connect">
         <span class="number">03 / Connect</span>
-        <h3>Owner stories, events and brand updates.</h3>
-        <p>Events, owner stories, community, experiences and brand updates for a premium yacht builder’s digital world.</p>
+        <h3>Events, owner stories and brand communications.</h3>
+        <p>Events, owner stories, brand communications, community, offers, service updates and optional owner-to-owner connection. This remains a polished demo area until a dedicated product scope is confirmed.</p>
         <span class="coming-soon">Coming soon</span>
       </article>
     </div>
   </div>
 </section>
-<section class="section">
+<section class="section" data-gated-route>
   <div class="container split">
-    <div class="section-head"><p class="eyebrow">Demo principle</p><h2>Polished, practical and not cluttered.</h2></div>
-    <div class="notice">Fix and Plan point to existing MYH products. Connect is intentionally shown as a finished Coming Soon area, not a broken or empty route.</div>
+    <div class="section-head"><p class="eyebrow">Demo principle</p><h2>Build once as MYH core, then wrap or theme for the ecosystem demo.</h2></div>
+    <div class="notice">Fix points to Onboard and Plan points to World Map. The ecosystem should frame, theme, link to or demonstrate core products rather than forking them into duplicate applications.</div>
   </div>
 </section>
 ''' + footer()
 
 pages = {
     'index.html': home,
+    'manual-platform/index.html': manual,
     'onboard/index.html': onboard,
     'world-map/index.html': world_map,
     'ecosystem/index.html': ecosystem,
+}
+
+assets = {
+    'assets/access-config.js': ACCESS_CONFIG_JS.replace('__ACCESS_HASH__', os.environ.get('MYH_GATEWAY_ACCESS_SHA256', '').strip()),
+    'assets/access-gate.js': ACCESS_GATE_JS,
+    'robots.txt': 'User-agent: *\nDisallow: /\n',
 }
 
 for rel, content in pages.items():
@@ -228,6 +392,14 @@ for rel, content in pages.items():
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding='utf-8')
 
+for rel, content in assets.items():
+    path = ROOT / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding='utf-8')
+
 print('Generated gateway pages:')
 for rel in pages:
+    print('-', rel)
+print('Generated gate assets:')
+for rel in assets:
     print('-', rel)

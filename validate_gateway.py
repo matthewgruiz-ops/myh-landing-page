@@ -4,9 +4,35 @@ from urllib.parse import urlparse
 import hashlib
 
 ROOT = Path('/home/ubuntu/myh_repo_audit/myh-landing-page')
-ROUTES = ['index.html', 'legacy/index.html', 'onboard/index.html', 'world-map/index.html', 'ecosystem/index.html']
-PUBLIC_GATEWAY_ROUTES = ['index.html', 'onboard/index.html', 'world-map/index.html', 'ecosystem/index.html']
+ROUTES = [
+    'index.html',
+    'legacy/index.html',
+    'manual-platform/index.html',
+    'onboard/index.html',
+    'world-map/index.html',
+    'ecosystem/index.html',
+]
+PUBLIC_GATEWAY_ROUTES = [
+    'index.html',
+    'manual-platform/index.html',
+    'onboard/index.html',
+    'world-map/index.html',
+    'ecosystem/index.html',
+]
+GATED_ROUTES = PUBLIC_GATEWAY_ROUTES
 EXPECTED_LEGACY_SHA256 = '4f84c470277bafd157b44752c7e1339d12c5dd6d194eead47c7ff3db3adbb074'
+PROHIBITED_DIRECT_APP_HREFS = [
+    'href="https://app.myyachthub.co.uk',
+    'href="https://onboard.myyachthub.co.uk',
+    'href="https://map.myyachthub.co.uk',
+]
+REQUIRED_PHRASES = {
+    'index.html': ['Manual Platform', 'Onboard', 'World Map', 'Digital Ecosystem'],
+    'manual-platform/index.html': ['Manual Platform', 'Platform access coming online'],
+    'onboard/index.html': ['Onboard', 'App access coming online'],
+    'world-map/index.html': ['World Map', 'Map access coming online'],
+    'ecosystem/index.html': ['powered by Onboard rather than copied', 'powered by World Map rather than duplicated'],
+}
 
 class LinkParser(HTMLParser):
     def __init__(self):
@@ -40,6 +66,48 @@ legacy = ROOT / 'legacy/index.html'
 legacy_hash = hashlib.sha256(legacy.read_bytes()).hexdigest()
 if legacy_hash != EXPECTED_LEGACY_SHA256:
     errors.append(f'Legacy checksum changed: {legacy_hash}')
+
+for asset in ['assets/access-config.js', 'assets/access-gate.js', 'assets/gateway.css', 'robots.txt']:
+    if not (ROOT / asset).exists():
+        errors.append(f'Missing generated asset: {asset}')
+
+for rel in GATED_ROUTES:
+    path = ROOT / rel
+    if not path.exists():
+        continue
+    text = path.read_text(encoding='utf-8')
+    if 'noindex' not in text.lower():
+        errors.append(f'Gated route missing noindex metadata: {rel}')
+    if '/assets/access-config.js' not in text or '/assets/access-gate.js' not in text:
+        errors.append(f'Gated route missing access-gate scripts: {rel}')
+
+home_text = (ROOT / 'index.html').read_text(encoding='utf-8') if (ROOT / 'index.html').exists() else ''
+for marker in ['data-access-form', 'data-gated', 'Private preview', 'Access code']:
+    if marker not in home_text:
+        errors.append(f'Homepage missing access-gate marker: {marker}')
+
+access_js = (ROOT / 'assets/access-gate.js').read_text(encoding='utf-8') if (ROOT / 'assets/access-gate.js').exists() else ''
+for marker in ['MYH_GATEWAY_ACCESS', 'data-access-form', 'data-gated-route', 'sessionStorage']:
+    if marker not in access_js:
+        errors.append(f'Access gate script missing marker: {marker}')
+
+for rel, phrases in REQUIRED_PHRASES.items():
+    path = ROOT / rel
+    if not path.exists():
+        continue
+    text = path.read_text(encoding='utf-8')
+    for phrase in phrases:
+        if phrase not in text:
+            errors.append(f'Missing required phrase in {rel}: {phrase}')
+
+for rel in PUBLIC_GATEWAY_ROUTES:
+    path = ROOT / rel
+    if not path.exists():
+        continue
+    text = path.read_text(encoding='utf-8')
+    for prohibited in PROHIBITED_DIRECT_APP_HREFS:
+        if prohibited in text:
+            errors.append(f'Unverified live app subdomain linked in {rel}: {prohibited}')
 
 for rel in ROUTES:
     path = ROOT / rel
