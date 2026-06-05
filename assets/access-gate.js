@@ -52,6 +52,8 @@
       markUnlocked();
       setMessage(form, 'Access unlocked for this session.', 'success');
       document.querySelectorAll('[data-gated]').forEach((element) => element.removeAttribute('hidden'));
+      document.querySelectorAll('[data-gated-route]').forEach((element) => element.removeAttribute('hidden'));
+      document.querySelectorAll('[data-route-gate]').forEach((element) => element.setAttribute('hidden', ''));
       const firstGated = document.querySelector('[data-gated]');
       if (firstGated) firstGated.focus({ preventScroll: false });
     } else {

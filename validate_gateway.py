@@ -7,14 +7,14 @@ ROOT = Path('/home/ubuntu/myh_repo_audit/myh-landing-page')
 ROUTES = [
     'index.html',
     'legacy/index.html',
-    'manual-platform/index.html',
+    'manual/index.html',
     'onboard/index.html',
     'world-map/index.html',
     'ecosystem/index.html',
 ]
 PUBLIC_GATEWAY_ROUTES = [
     'index.html',
-    'manual-platform/index.html',
+    'manual/index.html',
     'onboard/index.html',
     'world-map/index.html',
     'ecosystem/index.html',
@@ -28,7 +28,7 @@ PROHIBITED_DIRECT_APP_HREFS = [
 ]
 REQUIRED_PHRASES = {
     'index.html': ['Manual Platform', 'Onboard', 'World Map', 'Digital Ecosystem'],
-    'manual-platform/index.html': ['Manual Platform', 'Platform access coming online'],
+    'manual/index.html': ['Manual Platform', 'Platform access coming online'],
     'onboard/index.html': ['Onboard', 'App access coming online'],
     'world-map/index.html': ['World Map', 'Map access coming online'],
     'ecosystem/index.html': ['powered by Onboard rather than copied', 'powered by World Map rather than duplicated'],

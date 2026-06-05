@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/gateway.css" />
+  <script src="/assets/app-links.js" defer></script>
   <script src="/assets/access-config.js" defer></script>
   <script src="/assets/access-gate.js" defer></script>
 </head>
@@ -28,7 +29,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary navigation">
       <a href="/" aria-current="page">Home</a>
-      <a href="/manual-platform/">Manual Platform</a>
+      <a href="/manual/">Manual Platform</a>
       <a href="/onboard/">Onboard</a>
       <a href="/world-map/">World Map</a>
       <a href="/ecosystem/">Ecosystem</a>
@@ -68,43 +69,48 @@
     <div class="section-head">
       <p class="eyebrow">Product portals</p>
       <h2 id="products-title">Choose the right MYH product.</h2>
-      <p>Four controlled access points for the MYH product family. App CTAs remain internal until the target deployments are live and tested.</p>
+      <p>Four controlled access points for the MYH product family. App destinations are centrally configured, but CTAs remain internal until the target deployments are live and tested.</p>
     </div>
-    <div class="card-grid four-card-grid">
-      <article class="card">
+    <div class="card-grid product-grid-2x2">
+
+      <article class="card product-card is-coming-online">
         <span class="tag">Manual Platform</span>
         <h3>Structured vessel knowledge and builder-controlled information.</h3>
-        <p>Structured digital vessel manuals, systems knowledge, equipment records and builder-controlled vessel information.</p>
-        <div class="card-actions">
-          <a class="button primary" href="/manual-platform/">Find out more</a>
-          <a class="button" href="/manual-platform/#platform-access">Open platform</a>
+        <p>Digital manuals, systems knowledge, equipment records and vessel-specific information in one controlled product layer.</p>
+        <span class="card-status">Platform access coming online</span>
+        <div class="single-card-action">
+          <a class="button primary" href="/manual/">Open Platform</a>
+          <a class="text-link" href="/manual/#platform-access">Find out more</a>
         </div>
       </article>
-      <article class="card">
+      <article class="card product-card is-coming-online">
         <span class="tag">Onboard</span>
         <h3>Maintenance and issue flow for real boats.</h3>
-        <p>Fault reporting, fix tracking, parts, costs, maintenance actions and onboard issue history.</p>
-        <div class="card-actions">
-          <a class="button primary" href="/onboard/">Find out more</a>
-          <a class="button" href="/onboard/#app-access">Open Onboard</a>
+        <p>Fault reporting, fix tracking, parts, costs, maintenance actions and onboard issue history for owners and crew.</p>
+        <span class="card-status">App access coming online</span>
+        <div class="single-card-action">
+          <a class="button primary" href="/onboard/">Open Onboard</a>
+          <a class="text-link" href="/onboard/#app-access">Find out more</a>
         </div>
       </article>
-      <article class="card">
+      <article class="card product-card is-coming-online">
         <span class="tag">World Map</span>
         <h3>Cruising intelligence and destination planning.</h3>
-        <p>Cruising intelligence, anchorages, contacts, recommendations, owner knowledge and destination planning.</p>
-        <div class="card-actions">
-          <a class="button primary" href="/world-map/">Find out more</a>
-          <a class="button" href="/world-map/#map-access">Open map</a>
+        <p>Anchorages, contacts, recommendations, owner notes and destination planning around the existing map product.</p>
+        <span class="card-status">Map access coming online</span>
+        <div class="single-card-action">
+          <a class="button primary" href="/world-map/">Open Map</a>
+          <a class="text-link" href="/world-map/#map-access">Find out more</a>
         </div>
       </article>
-      <article class="card">
+      <article class="card product-card is-live">
         <span class="tag">Digital Ecosystem</span>
         <h3>A builder-branded owner world, shown as a polished demo.</h3>
-        <p>A pitch demo showing how a premium yacht builder could bring support, cruising, events and community into one branded owner world.</p>
-        <div class="card-actions">
-          <a class="button primary" href="/ecosystem/">View demo</a>
-          <a class="button" href="/ecosystem/#ecosystem-areas">Find out more</a>
+        <p>A pitch-ready demo connecting support, cruising, events, stories and community without forking the core apps.</p>
+        <span class="card-status">Demo available inside this private preview</span>
+        <div class="single-card-action">
+          <a class="button primary" href="/ecosystem/">View Demo</a>
+          <a class="text-link" href="/ecosystem/#ecosystem-areas">Explore areas</a>
         </div>
       </article>
     </div>
@@ -125,7 +131,7 @@
     <p>© MyYachtHub. Digital products for yachts, owners, crew, managers and builders.</p>
     <div class="footer-links">
       <a href="/legacy/">Legacy site</a>
-      <a href="/manual-platform/">Manual Platform</a>
+      <a href="/manual/">Manual Platform</a>
       <a href="mailto:hello@myyachthub.com">Contact</a>
     </div>
   </div>
