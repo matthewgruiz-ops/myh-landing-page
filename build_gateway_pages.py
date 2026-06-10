@@ -22,10 +22,10 @@ APP_LINKS = {
         'route': '/onboard/',
         'anchor': '#app-access',
         'intended_url': 'https://onboard.myyachthub.co.uk',
-        'live': False,
+        'live': True,
         'primary_label': 'Open Onboard',
-        'status_label': 'App access coming online',
-        'domain_note': 'Standalone app target: <strong>onboard.myyachthub.co.uk</strong>. This page avoids linking to that subdomain until the existing Onboard app deployment is live.',
+        'status_label': 'Live at onboard.myyachthub.co.uk',
+        'domain_note': 'Standalone app target: <strong>onboard.myyachthub.co.uk</strong>. The Onboard app deployment is live and validated on this final subdomain.',
     },
     'world-map': {
         'label': 'World Map',
@@ -303,7 +303,7 @@ home = header('home') + '''
     <div class="section-head">
       <p class="eyebrow">Product portals</p>
       <h2 id="products-title">Choose the right MYH product.</h2>
-      <p>Four controlled access points for the MYH product family. App destinations are centrally configured, but CTAs remain internal until the target deployments are live and tested.</p>
+      <p>Four controlled access points for the MYH product family. App destinations are centrally configured, and live product CTAs point to their validated standalone deployments.</p>
     </div>
     <div class="card-grid product-grid-2x2">
 {product_cards()}
@@ -316,7 +316,7 @@ home = header('home') + '''
       <p class="eyebrow">Access</p>
       <h2>Built as separate products, connected by one public story.</h2>
     </div>
-    <div class="notice">Interested in pilot access or a builder demo? Use the Request Access button to contact MYH. The intended app domains are app.myyachthub.co.uk, onboard.myyachthub.co.uk and map.myyachthub.co.uk, but this gateway does not point users to those subdomains until each deployment is live and tested.</div>
+    <div class="notice">Interested in pilot access or a builder demo? Use the Request Access button to contact MYH. Onboard is now live at onboard.myyachthub.co.uk; the Manual Platform and World Map links remain controlled until their deployments are separately validated.</div>
   </div>
 </section>
 ''' + footer()
@@ -357,8 +357,8 @@ onboard = header('onboard') + access_panel('onboard') + f'''
     <h1>The living maintenance memory for your boat.</h1>
     <p class="product-summary">Onboard helps owners and crew report faults, track fixes, capture service history, record costs and manage practical maintenance without rebuilding the existing app.</p>
     <div class="actions">
-      <a class="button primary" href="mailto:hello@myyachthub.com?subject=Onboard%20access%20request">Request access</a>
-      <span class="button disabled" aria-disabled="true">{APP_LINKS['onboard']['status_label']}</span>
+      <a class="button primary" href="{link_for('onboard')}">Open Onboard</a>
+      <a class="button" href="mailto:hello@myyachthub.com?subject=Onboard%20access%20request">Request access</a>
     </div>
     <div class="info-strip">
       <div class="info-item"><strong>Faults and fixes</strong><p>Log issues, urgency, photos and resolution flow.</p></div>
@@ -372,7 +372,7 @@ onboard = header('onboard') + access_panel('onboard') + f'''
     <div class="section-head"><p class="eyebrow">What it supports</p><h2>Clear onboard operations for owners and crew.</h2><p class="domain-note">{APP_LINKS['onboard']['domain_note']}</p></div>
     <div class="feature-list">
       <div class="feature"><strong>Find out more.</strong> Use this page as the short access point for Onboard.</div>
-      <div class="feature"><strong>Log in.</strong> Use the standalone Onboard app once its subdomain deployment is live.</div>
+      <div class="feature"><strong>Log in.</strong> Use the validated standalone Onboard app at onboard.myyachthub.co.uk.</div>
       <div class="feature"><strong>Request access.</strong> Contact MYH for app access, onboarding or beta invitations.</div>
     </div>
   </div>
