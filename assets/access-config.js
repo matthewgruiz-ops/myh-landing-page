@@ -1,4 +1,4 @@
 window.MYH_GATEWAY_ACCESS = {
-  hash: "fafacc881331b9835cc2d169cbfcf57f5ce2f295902d19de9284785ce7c900e3",
+  hash: "20181e1f046e5adb962c8d848d11b3b05f62d6b1eabc0742f0880d4e54531a96",
   storageKey: "myh_gateway_access_unlocked"
 };
