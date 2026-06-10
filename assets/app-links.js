@@ -11,9 +11,9 @@ window.MYH_APP_LINKS = {
     "label": "Onboard",
     "route": "/onboard/",
     "intendedUrl": "https://onboard.myyachthub.co.uk",
-    "live": false,
-    "primaryHref": "/onboard/",
-    "statusLabel": "App access coming online"
+    "live": true,
+    "primaryHref": "https://onboard.myyachthub.co.uk",
+    "statusLabel": "Live at onboard.myyachthub.co.uk"
   },
   "world-map": {
     "label": "World Map",

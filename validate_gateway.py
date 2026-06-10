@@ -23,13 +23,12 @@ GATED_ROUTES = PUBLIC_GATEWAY_ROUTES
 EXPECTED_LEGACY_SHA256 = '4f84c470277bafd157b44752c7e1339d12c5dd6d194eead47c7ff3db3adbb074'
 PROHIBITED_DIRECT_APP_HREFS = [
     'href="https://app.myyachthub.co.uk',
-    'href="https://onboard.myyachthub.co.uk',
     'href="https://map.myyachthub.co.uk',
 ]
 REQUIRED_PHRASES = {
     'index.html': ['Manual Platform', 'Onboard', 'World Map', 'Digital Ecosystem'],
     'manual/index.html': ['Manual Platform', 'Platform access coming online'],
-    'onboard/index.html': ['Onboard', 'App access coming online'],
+    'onboard/index.html': ['Onboard', 'The Onboard app deployment is live and validated on this final subdomain'],
     'world-map/index.html': ['World Map', 'Map access coming online'],
     'ecosystem/index.html': ['powered by Onboard rather than copied', 'powered by World Map rather than duplicated'],
 }
@@ -107,7 +106,7 @@ for rel in PUBLIC_GATEWAY_ROUTES:
     text = path.read_text(encoding='utf-8')
     for prohibited in PROHIBITED_DIRECT_APP_HREFS:
         if prohibited in text:
-            errors.append(f'Unverified live app subdomain linked in {rel}: {prohibited}')
+            errors.append(f'Unverified or not-yet-approved live app subdomain linked in {rel}: {prohibited}')
 
 for rel in ROUTES:
     path = ROOT / rel
