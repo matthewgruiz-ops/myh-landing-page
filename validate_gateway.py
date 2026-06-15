@@ -19,14 +19,21 @@ PUBLIC_GATEWAY_ROUTES = [
     'world-map/index.html',
     'ecosystem/index.html',
 ]
-GATED_ROUTES = PUBLIC_GATEWAY_ROUTES
-EXPECTED_LEGACY_SHA256 = '4f84c470277bafd157b44752c7e1339d12c5dd6d194eead47c7ff3db3adbb074'
-PROHIBITED_DIRECT_APP_HREFS = [
-    'href="https://app.myyachthub.co.uk',
-    'href="https://map.myyachthub.co.uk',
+GATED_ROUTES = [
+    'manual/index.html',
+    'onboard/index.html',
+    'world-map/index.html',
+    'ecosystem/index.html',
 ]
+EXPECTED_LEGACY_SHA256 = '4f84c470277bafd157b44752c7e1339d12c5dd6d194eead47c7ff3db3adbb074'
+REQUIRED_HOME_HREFS = [
+    'href="https://app.myyachthub.co.uk"',
+    'href="https://onboard.myyachthub.co.uk"',
+    'href="https://map.myyachthub.co.uk"',
+]
+PROHIBITED_HOME_MARKERS = ['data-access-form', 'data-gated', 'Private preview', 'Access code']
 REQUIRED_PHRASES = {
-    'index.html': ['Manual Platform', 'Onboard', 'World Map', 'Digital Ecosystem'],
+    'index.html': ['Manual', 'Onboard', 'World Map', 'Branded Ecosystem', 'Coming Soon'],
     'manual/index.html': ['Manual Platform', 'Platform access coming online'],
     'onboard/index.html': ['Onboard', 'The Onboard app deployment is live and validated on this final subdomain'],
     'world-map/index.html': ['World Map', 'Map access coming online'],
@@ -81,9 +88,12 @@ for rel in GATED_ROUTES:
         errors.append(f'Gated route missing access-gate scripts: {rel}')
 
 home_text = (ROOT / 'index.html').read_text(encoding='utf-8') if (ROOT / 'index.html').exists() else ''
-for marker in ['data-access-form', 'data-gated', 'Private preview', 'Access code']:
-    if marker not in home_text:
-        errors.append(f'Homepage missing access-gate marker: {marker}')
+for marker in PROHIBITED_HOME_MARKERS:
+    if marker in home_text:
+        errors.append(f'Homepage still contains private access-gate marker: {marker}')
+for href in REQUIRED_HOME_HREFS:
+    if href not in home_text:
+        errors.append(f'Homepage missing required product href: {href}')
 
 access_js = (ROOT / 'assets/access-gate.js').read_text(encoding='utf-8') if (ROOT / 'assets/access-gate.js').exists() else ''
 for marker in ['MYH_GATEWAY_ACCESS', 'data-access-form', 'data-gated-route', 'sessionStorage']:
@@ -99,14 +109,6 @@ for rel, phrases in REQUIRED_PHRASES.items():
         if phrase not in text:
             errors.append(f'Missing required phrase in {rel}: {phrase}')
 
-for rel in PUBLIC_GATEWAY_ROUTES:
-    path = ROOT / rel
-    if not path.exists():
-        continue
-    text = path.read_text(encoding='utf-8')
-    for prohibited in PROHIBITED_DIRECT_APP_HREFS:
-        if prohibited in text:
-            errors.append(f'Unverified or not-yet-approved live app subdomain linked in {rel}: {prohibited}')
 
 for rel in ROUTES:
     path = ROOT / rel

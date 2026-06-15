@@ -52,33 +52,35 @@ APP_LINKS = {
 PRODUCTS = [
     {
         'key': 'manual',
-        'tag': 'Manual Platform',
-        'title': 'Structured vessel knowledge and builder-controlled information.',
-        'description': 'Digital manuals, systems knowledge, equipment records and vessel-specific information in one controlled product layer.',
-        'secondary_label': 'Find out more',
+        'tag': 'Manual',
+        'title': 'Manual',
+        'description': 'Digital vessel manuals and technical knowledge systems.',
+        'cta': 'Open Manual',
     },
     {
         'key': 'onboard',
         'tag': 'Onboard',
-        'title': 'Maintenance and issue flow for real boats.',
-        'description': 'Fault reporting, fix tracking, parts, costs, maintenance actions and onboard issue history for owners and crew.',
-        'secondary_label': 'Find out more',
+        'title': 'Onboard',
+        'description': 'Maintenance, tasks, spend, inventory and daily vessel operations.',
+        'cta': 'Open Onboard',
     },
     {
         'key': 'world-map',
         'tag': 'World Map',
-        'title': 'Cruising intelligence and destination planning.',
-        'description': 'Anchorages, contacts, recommendations, owner notes and destination planning around the existing map product.',
-        'secondary_label': 'Find out more',
+        'title': 'World Map',
+        'description': 'Cruising intelligence, destination notes and route planning.',
+        'cta': 'Open World Map',
     },
     {
         'key': 'ecosystem',
-        'tag': 'Digital Ecosystem',
-        'title': 'A builder-branded owner world, shown as a polished demo.',
-        'description': 'A pitch-ready demo connecting support, cruising, events, stories and community without forking the core apps.',
-        'secondary_label': 'Explore areas',
+        'tag': 'Branded Ecosystem',
+        'title': 'Branded Ecosystem',
+        'description': 'A branded owner ecosystem connecting manuals, maintenance, cruising and community.',
+        'cta': 'Coming Soon',
     },
 ]
+
+DEFAULT_ACCESS_HASH = '20181e1f046e5adb962c8d848d11b3b05f62d6b1eabc0742f0880d4e54531a96'
 
 ACCESS_CONFIG_JS = '''window.MYH_GATEWAY_ACCESS = {
   hash: "__ACCESS_HASH__",
@@ -291,8 +293,18 @@ def status_class(key):
 def header(active="home"):
     def current(name):
         return ' aria-current="page"' if active == name else ''
+    html_class = '' if active == "home" else ' class="access-locked"'
+    nav_markup = '' if active == "home" else f'''
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="/"{current('home')}>Home</a>
+      <a href="/manual/"{current('manual')}>Manual Platform</a>
+      <a href="/onboard/"{current('onboard')}>Onboard</a>
+      <a href="/world-map/"{current('world-map')}>World Map</a>
+      <a href="/ecosystem/"{current('ecosystem')}>Ecosystem</a>
+      <a class="nav-cta" href="mailto:hello@myyachthub.com?subject=MYH%20access%20request">Request Access</a>
+    </nav>'''
     return f'''<!doctype html>
-<html lang="en" class="access-locked">
+<html lang="en"{html_class}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -319,15 +331,7 @@ def header(active="home"):
     <a class="brand" href="/" aria-label="MyYachtHub home">
       {LOGO}
       <span class="brand-text"><span class="brand-name">MY YACHT HUB</span><span class="brand-subtitle">Digital products for yachts</span></span>
-    </a>
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="/"{current('home')}>Home</a>
-      <a href="/manual/"{current('manual')}>Manual Platform</a>
-      <a href="/onboard/"{current('onboard')}>Onboard</a>
-      <a href="/world-map/"{current('world-map')}>World Map</a>
-      <a href="/ecosystem/"{current('ecosystem')}>Ecosystem</a>
-      <a class="nav-cta" href="mailto:hello@myyachthub.com?subject=MYH%20access%20request">Request Access</a>
-    </nav>
+    </a>{nav_markup}
   </div>
 </header>
 <main id="main">'''
@@ -378,51 +382,40 @@ def product_cards():
     for product in PRODUCTS:
         key = product['key']
         cfg = APP_LINKS[key]
-        href = link_for(key)
-        secondary = cfg['route'] + cfg['anchor']
-        status = cfg['status_label']
-        cards.append(f'''
-      <article class="card product-card {status_class(key)}">
+        if key == 'ecosystem':
+            cards.append(f'''
+      <article class="card product-card product-tile is-disabled" aria-disabled="true">
         <span class="tag">{product['tag']}</span>
         <h3>{product['title']}</h3>
         <p>{product['description']}</p>
-        <span class="card-status">{status}</span>
-        <div class="single-card-action">
-          <a class="button primary" href="{href}">{cfg['primary_label']}</a>
-          <a class="text-link" href="{secondary}">{product['secondary_label']}</a>
-        </div>
+        <span class="tile-cta is-disabled">{product['cta']}</span>
       </article>''')
+            continue
+        href = cfg['intended_url']
+        cards.append(f'''
+      <a class="card product-card product-tile" href="{href}" aria-label="{product['cta']}">
+        <span class="tag">{product['tag']}</span>
+        <h3>{product['title']}</h3>
+        <p>{product['description']}</p>
+        <span class="tile-cta">{product['cta']}</span>
+      </a>''')
     return ''.join(cards)
 
 
-home = header('home') + '''
-<section class="hero">
+home = header('home') + f'''
+<section class="hero gateway-hero">
   <div class="container hero-grid">
     <p class="eyebrow">MyYachtHub</p>
     <h1>Digital products that make yachts easier to use, manage and understand.</h1>
     <p class="hero-copy">From digital vessel manuals and onboard maintenance to cruising intelligence and branded owner ecosystems, MYH creates practical tools for yacht builders, owners, crew and managers.</p>
   </div>
 </section>
-''' + access_panel('home') + f'''
-<section class="section gated-products" aria-labelledby="products-title" data-gated tabindex="-1">
+<section class="section product-gateway" aria-labelledby="products-title">
   <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">Product portals</p>
-      <h2 id="products-title">Choose the right MYH product.</h2>
-      <p>Four controlled access points for the MYH product family. App destinations are centrally configured, and live product CTAs point to their validated standalone deployments.</p>
-    </div>
-    <div class="card-grid product-grid-2x2">
+    <h2 id="products-title" class="visually-hidden">Choose the MYH product you want.</h2>
+    <div class="card-grid product-grid-2x2 gateway-tile-grid">
 {product_cards()}
     </div>
-  </div>
-</section>
-<section class="section" id="request-access">
-  <div class="container split">
-    <div class="section-head">
-      <p class="eyebrow">Access</p>
-      <h2>Built as separate products, connected by one public story.</h2>
-    </div>
-    <div class="notice">Interested in pilot access or a builder demo? Use the Request Access button to contact MYH. Onboard is now live at onboard.myyachthub.co.uk; the Manual Platform and World Map links remain controlled until their deployments are separately validated.</div>
   </div>
 </section>
 ''' + footer()
@@ -575,7 +568,7 @@ safe_app_links = {
 }
 
 assets = {
-    'assets/access-config.js': ACCESS_CONFIG_JS.replace('__ACCESS_HASH__', os.environ.get('MYH_GATEWAY_ACCESS_SHA256', '').strip()),
+    'assets/access-config.js': ACCESS_CONFIG_JS.replace('__ACCESS_HASH__', os.environ.get('MYH_GATEWAY_ACCESS_SHA256', DEFAULT_ACCESS_HASH).strip()),
     'assets/access-gate.js': ACCESS_GATE_JS,
     'assets/app-links.js': 'window.MYH_APP_LINKS = ' + json.dumps(safe_app_links, indent=2) + ';\n',
     'robots.txt': 'User-agent: *\nDisallow: /\n',
